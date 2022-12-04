@@ -1,2 +1,2 @@
-# GrowFood
+# GardenAppProject
 vegetable gardening app
