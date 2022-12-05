@@ -18,13 +18,13 @@ I will demonstrate the following:
 
 Example:
 
-  curl http://localhost:8080/api/v1/users -d { "name" : "joseph", "zipcode" :35235}
+    curl http://localhost:8080/api/v1/users -d { "name" : "joseph", "zipcode" :35235}
 
-  You can plant:
-  carrot
-  beats
-  turnips
-  lettuce
-  ...
+    You can plant:
+    carrot
+    beats
+    turnips
+    lettuce
+    ...
 
 
