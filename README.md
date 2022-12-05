@@ -12,8 +12,19 @@ I will demonstrate the following:
 4.Testing of HTTP handlers
 5.Testing of Http Client
 
-# User Stories
+## User Stories
 
-## As a user I would like to fetch information about what vegetables I am able to plant at this time.
+### As a user I would like to fetch information about what vegetables I am able to plant at this time.
+
+Example:
+
+`curl http://localhost:8080/api/v1/users -d { "name" : "joseph", "zipcode" :35235}
+
+You can plant:
+carrot
+beats
+turnips
+lettuce
+...`
 
 
