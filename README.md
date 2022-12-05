@@ -1,7 +1,7 @@
 # GardenAppProject
 vegetable gardening app
 
-##Summary
+## Summary
 The projected outlined here will be to create an application (gardenapp) that, given user information (zipcode), returns information about what vegetables can be planted at the time of the request got their given growing zone. The project will involve creating a DB of vegetable types and their growing times in relation to the hardiness zones in the United States, and an api server that can take in user information and return a list of vegetables.
 
 I will demonstrate the following:
@@ -12,8 +12,8 @@ I will demonstrate the following:
 4.Testing of HTTP handlers
 5.Testing of Http Client
 
-#User Stories
+# User Stories
 
-##As a user I would like to fetch information about what vegetables I am able to plant at this time.
+## As a user I would like to fetch information about what vegetables I am able to plant at this time.
 
 
