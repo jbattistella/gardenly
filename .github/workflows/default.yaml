@@ -15,4 +15,4 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v3
       - name: Test
-        run: cd client && go run test -v
+        run: cd client && go test -v
