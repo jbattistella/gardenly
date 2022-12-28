@@ -35,22 +35,24 @@ func main() {
 		fmt.Println("Winter is coming")
 		fmt.Println("Garlic and Onions can be planted in the fall and winter for spring harvest")
 		dTFrost, err = client.GetDatesByTemperature(station, 1)
-		firstFrost := dTFrost.FirstFrost
-		fmt.Printf("There are %0.0f days until the last frost \n", firstFrost)
-		fmt.Printf("Check back in at %0.0f days", (firstFrost - 45))
+		lastFrost := dTFrost.LastFrost
+		fmt.Printf("There are %0.0f days until the last frost \n", lastFrost)
+		fmt.Printf("Check back in at %0.0f days", (lastFrost - 45))
 	}
 	if dTFrost.FirstFrost < (-30) {
 		fmt.Println("Winter is coming")
 		dTFrost, err = client.GetDatesByTemperature(station, 1)
-		firstFrost := dTFrost.FirstFrost
-		fmt.Printf("There are %0.0f days until the last frost \n", firstFrost)
-		fmt.Printf("Check back in at %0.0f days", (firstFrost - 45))
+		lastFrost := dTFrost.LastFrost
+		fmt.Println(lastFrost)
+		fmt.Printf("There are %0.0f days until the last frost \n", lastFrost)
+		fmt.Printf("Check back in at %0.0f days", (lastFrost - 45))
 	}
 	if dTFrost.FirstFrost < -60 {
 		dTFrost, err = client.GetDatesByTemperature(station, 1)
-		firstFrost := dTFrost.FirstFrost
-		fmt.Printf("There are %0.0f days until the last frost \n", firstFrost)
-		fmt.Printf("Check back in at %0.0f days", (firstFrost - 45))
+		lastFrost := dTFrost.LastFrost
+		fmt.Println(lastFrost)
+		fmt.Printf("There are %0.0f days until the last frost \n", lastFrost)
+		fmt.Printf("Check back in at %0.0f days", (lastFrost - 45))
 	}
 }
 
