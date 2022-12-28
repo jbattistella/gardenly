@@ -39,8 +39,8 @@ Notes:
 I would like to add functionality to this project as i complete different parts. 
 Added functionality:
 1.App is hosted remotely
-2.Send an email to a user containing the growing information.
-3.Store user information and send emails on a regular basis that contain more personalized information.
+2.Request info by zipcode, return zipcode
+3.Add flag in cli that automatically updates database
 
     
     
