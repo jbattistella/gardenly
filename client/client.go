@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"math"
 	"net/http"
 	"time"
 )
@@ -20,6 +21,7 @@ func GetPostalInfo(zip int) (PostalCodeInfo, error) {
 	if err != nil {
 		return PostalCodeInfo{}, err
 	}
+
 	defer res.Body.Close()
 	var info PostalCodeInfo
 	if err = json.NewDecoder(res.Body).Decode(&info); err != nil {
@@ -32,7 +34,7 @@ func GetPostalInfo(zip int) (PostalCodeInfo, error) {
 
 func (pci *PostalCodeInfo) GetStation() (string, error) {
 
-	url := fmt.Sprintf("https://api.farmsense.net/v1/frostdates/stations/?lat=%s&lon=%s", pci.Places[0].Lat, pci.Places[0].Long)
+	url := fmt.Sprintf("https://api.farmsense.net/v1/frostdates/stations/?lat=%s&lon=%s", pci.Places[0].Latitude, pci.Places[0].Longitude)
 
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
@@ -52,7 +54,7 @@ func (pci *PostalCodeInfo) GetStation() (string, error) {
 	return station, nil
 }
 
-func GetDatesByTemperature(id string, y int) (float64, float64, error) {
+func GetDatesByTemperature(id string, y int) (DaysFromFrost, error) {
 
 	url1 := fmt.Sprintf("https://api.farmsense.net/v1/frostdates/probabilities/?station=%s&season=%s", id, "1")
 	req, err := http.NewRequest("GET", url1, nil)
@@ -88,18 +90,23 @@ func GetDatesByTemperature(id string, y int) (float64, float64, error) {
 		log.Fatal(err)
 	}
 
-	daysFromLastFrost := daysFrom(springDates[0].Prob90, y)
-	daysFromFirstFrost := daysFrom(fallDates[0].Prob90, y)
+	daysFromLastFrost := DaysFrom(springDates[0].Prob90, y)
+	daysFromFirstFrost := DaysFrom(fallDates[0].Prob90, y)
 
-	return daysFromLastFrost, daysFromFirstFrost, nil
+	dff := DaysFromFrost{
+		FirstFrost: daysFromFirstFrost,
+		LastFrost:  daysFromLastFrost,
+	}
+
+	return dff, nil
 }
 
-func daysFrom(t string, y int) float64 {
+func DaysFrom(t string, y int) float64 {
 	year := (time.Now().Year()) + y
 	dateString := fmt.Sprintf("%d%s", year, t)
 
 	date, _ := time.Parse("20060102", dateString)
-	daysFrom := time.Until(date).Hours() / 24
+	daysFrom := math.RoundToEven(time.Until(date).Hours() / 24)
 
 	return daysFrom
 }
