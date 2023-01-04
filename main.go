@@ -34,7 +34,6 @@ func main() {
 	}
 	if dTFrost.FirstFrost > 0 && dTFrost.LastFrost < 0 {
 		fmt.Println("here2")
-		// datesToReference = dTFrost.FirstFrost
 		getCropsToPlant(dTFrost.FirstFrost)
 
 	}
