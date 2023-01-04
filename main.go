@@ -23,13 +23,20 @@ func main() {
 
 	// var datesToReference float64
 
-	if dTFrost.LastFrost > 0 {
+	fmt.Printf("days to first frost: %f, days to last frost: %f", dTFrost.FirstFrost, dTFrost.LastFrost)
+
+	if dTFrost.FirstFrost < 0 {
+
 		// datesToReference = dTFrost.LastFrost
+		fmt.Println("here1")
 		getCropsToPlant(dTFrost.LastFrost)
+
 	}
 	if dTFrost.FirstFrost > 0 && dTFrost.LastFrost < 0 {
+		fmt.Println("here2")
 		// datesToReference = dTFrost.FirstFrost
 		getCropsToPlant(dTFrost.FirstFrost)
+
 	}
 	if dTFrost.FirstFrost < 0 && dTFrost.FirstFrost > -30 {
 		fmt.Println("Winter is coming")
@@ -54,6 +61,13 @@ func main() {
 		fmt.Printf("There are %0.0f days until the last frost \n", lastFrost)
 		fmt.Printf("Check back in at %0.0f days", (lastFrost - 45))
 	}
+	if dTFrost.LastFrost > 0 {
+		fmt.Println("We are in the year of the new growing season!")
+	}
+	if dTFrost.LastFrost > 0 && dTFrost.LastFrost < 45 {
+		getCropsToPlant(dTFrost.FirstFrost)
+	}
+
 }
 
 func getCropsToPlant(days float64) {
