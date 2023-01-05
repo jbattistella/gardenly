@@ -3,6 +3,7 @@ package database
 import (
 	"database/sql"
 	"encoding/csv"
+	"fmt"
 	"io"
 	"log"
 	"os"
@@ -29,11 +30,11 @@ func ConnectDB() error {
 	// fmt.Println(host + port + user)
 
 	// postgresql://${{ PGUSER }}:${{ PGPASSWORD }}@${{ PGHOST }}:${{ PGPORT }}/${{ PGDATABASE }}
-	url := "postgresql://postgres:Ra4uTQDKbj5mZNyDsMfn@containers-us-west-89.railway.app:6607/railway"
+	url := "//postgres:Ra4uTQDKbj5mZNyDsMfn@containers-us-west-89.railway.app:6607/railway"
 
 	// psqlInfo := fmt.Sprintf("postgresql://%s:%s@%s:%s/%s",
 	// 	user, password, host, port, dbname)
-	// fmt.Println(psqlInfo)
+	fmt.Println(url)
 
 	db, err := sql.Open("postgres", url)
 	if err != nil {
