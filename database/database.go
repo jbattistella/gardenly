@@ -3,7 +3,6 @@ package database
 import (
 	"database/sql"
 	"encoding/csv"
-	"fmt"
 	"io"
 	"log"
 	"os"
@@ -22,20 +21,21 @@ func ConnectDB() error {
 		log.Fatal(err)
 	}
 
-	host := os.Getenv("PGHOST")
-	port := os.Getenv("PGPORT")
-	user := os.Getenv("PGUSER")
-	password := os.Getenv("PGPASSWORD")
-	dbname := os.Getenv("PGDATABASE")
-	fmt.Println(host + port + user)
+	// host := os.Getenv("PGHOST")
+	// port := os.Getenv("PGPORT")
+	// user := os.Getenv("PGUSER")
+	// password := os.Getenv("PGPASSWORD")
+	// dbname := os.Getenv("PGDATABASE")
+	// fmt.Println(host + port + user)
 
 	// postgresql://${{ PGUSER }}:${{ PGPASSWORD }}@${{ PGHOST }}:${{ PGPORT }}/${{ PGDATABASE }}
+	url := "postgresql://postgres:Ra4uTQDKbj5mZNyDsMfn@containers-us-west-89.railway.app:6607/railway"
 
-	psqlInfo := fmt.Sprintf("postgresql://%s:%s@%s:%s/%s",
-		user, password, host, port, dbname)
-	fmt.Println(psqlInfo)
+	// psqlInfo := fmt.Sprintf("postgresql://%s:%s@%s:%s/%s",
+	// 	user, password, host, port, dbname)
+	// fmt.Println(psqlInfo)
 
-	db, err := sql.Open("postgres", psqlInfo)
+	db, err := sql.Open("postgres", url)
 	if err != nil {
 		panic(err)
 	}
