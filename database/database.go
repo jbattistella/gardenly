@@ -1,6 +1,7 @@
 package database
 
 import (
+	"database/sql"
 	"encoding/csv"
 	"io"
 	"log"
@@ -10,6 +11,7 @@ import (
 	"github.com/go-pg/pg"
 	"github.com/go-pg/pg/orm"
 	"github.com/joho/godotenv"
+	_ "github.com/lib/pq"
 )
 
 var DB *pg.DB
@@ -19,21 +21,27 @@ func ConnectDB() error {
 		log.Fatal(err)
 	}
 
-	opts := &pg.Options{
-		User:            os.Getenv("PGUSER"),
-		Password:        os.Getenv("PGPASSWORD"),
-		Addr:            os.Getenv("PGPORT"),
-		Database:        os.Getenv("PGDATABASE"),
-		ApplicationName: os.Getenv("PGHOST"),
+	// host := os.Getenv("PGHOST")
+	// port := os.Getenv("PGPORT")
+	// user := os.Getenv("PGUSER")
+	// password := os.Getenv("PGPASSWORD")
+	// dbname := os.Getenv("PGDATABASE")
+
+	// psqlInfo := fmt.Sprintf("host=%s port=%s user=%s "+
+	// 	"password=%s dbname=%s sslmode=disable",
+	// 	host, port, user, password, dbname)
+
+	db, err := sql.Open("postgres", os.Getenv("URL"))
+	if err != nil {
+		panic(err)
+	}
+	defer db.Close()
+
+	err = db.Ping()
+	if err != nil {
+		panic(err)
 	}
 
-	DB = pg.Connect(opts)
-	if DB == nil {
-		log.Printf("Database connection failed.\n")
-		os.Exit(100)
-	} else {
-		log.Printf("connected")
-	}
 	return nil
 }
 
