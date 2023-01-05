@@ -39,14 +39,12 @@ func ConnectDB() error {
 	db, err := sql.Open("postgres", url)
 	if err != nil {
 		fmt.Println("here")
-		panic(err)
 	}
 	defer db.Close()
 
 	err = db.Ping()
 	if err != nil {
 		fmt.Println("there")
-		panic(err)
 	}
 
 	return nil
