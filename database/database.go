@@ -33,6 +33,7 @@ func ConnectDB() error {
 
 	psqlInfo := fmt.Sprintf("postgresql://%s:%s@%s:%s/%s",
 		user, password, host, port, dbname)
+	fmt.Println(psqlInfo)
 
 	db, err := sql.Open("postgres", psqlInfo)
 	if err != nil {
