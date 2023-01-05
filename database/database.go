@@ -2,15 +2,10 @@ package database
 
 import (
 	"database/sql"
-	"encoding/csv"
 	"fmt"
-	"io"
 	"log"
-	"os"
-	"strconv"
 
 	"github.com/go-pg/pg"
-	"github.com/go-pg/pg/orm"
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 )
@@ -50,73 +45,73 @@ func ConnectDB() error {
 	return nil
 }
 
-func UpdateDateDataBase() {
-	if err := createVegetableSchema(DB); err != nil {
-		log.Fatal(err)
-	}
+// func UpdateDateDataBase() {
+// 	if err := createVegetableSchema(DB); err != nil {
+// 		log.Fatal(err)
+// 	}
 
-	data, err := loadDataBaseWithCsv()
-	if err != nil {
-		log.Fatal(err)
-	}
+// 	data, err := loadDataBaseWithCsv()
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
 
-	_, err = DB.Model(&data).Insert()
-	if err != nil {
-		log.Println(err)
-	}
-}
+// 	_, err = DB.Model(&data).Insert()
+// 	if err != nil {
+// 		log.Println(err)
+// 	}
+// }
 
-func createVegetableSchema(db *pg.DB) error {
-	models := []interface{}{
-		(*Vegetable)(nil),
-	}
+// func createVegetableSchema(db *pg.DB) error {
+// 	models := []interface{}{
+// 		(*Vegetable)(nil),
+// 	}
 
-	for _, model := range models {
-		err := db.Model(model).CreateTable(&orm.CreateTableOptions{
-			IfNotExists: true,
-		})
+// 	for _, model := range models {
+// 		err := db.Model(model).CreateTable(&orm.CreateTableOptions{
+// 			IfNotExists: true,
+// 		})
 
-		if err != nil {
-			return err
-		}
-	}
+// 		if err != nil {
+// 			return err
+// 		}
+// 	}
 
-	return nil
-}
+// 	return nil
+// }
 
-func loadDataBaseWithCsv() ([]Vegetable, error) {
+// func loadDataBaseWithCsv() ([]Vegetable, error) {
 
-	csvFile, _ := os.Open("vegetables2.csv")
-	reader := csv.NewReader(csvFile)
-	reader.TrimLeadingSpace = true
+// 	csvFile, _ := os.Open("vegetables2.csv")
+// 	reader := csv.NewReader(csvFile)
+// 	reader.TrimLeadingSpace = true
 
-	var veg []Vegetable
+// 	var veg []Vegetable
 
-	for {
-		line, error := reader.Read()
+// 	for {
+// 		line, error := reader.Read()
 
-		if error == io.EOF {
-			break
+// 		if error == io.EOF {
+// 			break
 
-		} else if error != nil {
-			log.Fatal(error)
-		}
+// 		} else if error != nil {
+// 			log.Fatal(error)
+// 		}
 
-		dtm, err := strconv.Atoi(line[1])
-		if err != nil {
-			return []Vegetable{}, err
-		}
-		dtt, err := strconv.Atoi(line[2])
-		if err != nil {
-			return []Vegetable{}, err
-		}
+// 		dtm, err := strconv.Atoi(line[1])
+// 		if err != nil {
+// 			return []Vegetable{}, err
+// 		}
+// 		dtt, err := strconv.Atoi(line[2])
+// 		if err != nil {
+// 			return []Vegetable{}, err
+// 		}
 
-		veg = append(veg, Vegetable{
-			CommonName: line[0],
-			DTM:        dtm,
-			DownToTemp: dtt,
-		})
+// 		veg = append(veg, Vegetable{
+// 			CommonName: line[0],
+// 			DTM:        dtm,
+// 			DownToTemp: dtt,
+// 		})
 
-	}
-	return veg, nil
-}
+// 	}
+// 	return veg, nil
+// }
