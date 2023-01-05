@@ -1,6 +1,7 @@
 package client
 
 import (
+	"fmt"
 	"math"
 	"testing"
 	"time"
@@ -51,7 +52,8 @@ func TestDaysFrom(t *testing.T) {
 
 	t.Run("OK", func(t *testing.T) {
 		testDate := "1027"
-		dateString := "20221027"
+		year := time.Now().Year()
+		dateString := fmt.Sprintf("%d%s", year, testDate)
 		dateTime, _ := time.Parse("20060102", dateString)
 		daysFrom := math.RoundToEven(time.Until(dateTime).Hours() / 24)
 
@@ -65,19 +67,3 @@ func TestDaysFrom(t *testing.T) {
 
 	})
 }
-
-//Testing this would need to incorporate a function that calculates daty to, bc
-// func TestGetDatesByTemperature(t *testing.T) {
-
-// 	t.Run("OK", func(t *testing.T) {
-// 		tdff := DaysFromFrost{
-// 			FirstFrost: -33.96006275064815,
-// 			LastFrost:  -294.9600627506134,
-// 		}
-
-// 		res, err := GetDatesByTemperature("10583", 0)
-// 		assert.NoError(t, err)
-// 		assert.Equal(t, tdff, res)
-// 	})
-
-// }
