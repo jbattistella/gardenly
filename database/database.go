@@ -20,10 +20,11 @@ func ConnectDB() error {
 	}
 
 	opts := &pg.Options{
-		User:     os.Getenv("DB_USER"),
-		Password: os.Getenv("DB_PASSWORD"),
-		Addr:     os.Getenv("DB_ADDR"),
-		Database: os.Getenv("DB_DATABASE"),
+		User:            os.Getenv("PGUSER"),
+		Password:        os.Getenv("PGPASSWORD"),
+		Addr:            os.Getenv("PGPORT"),
+		Database:        os.Getenv("PGDATABASE"),
+		ApplicationName: os.Getenv("PGHOST"),
 	}
 
 	DB = pg.Connect(opts)
