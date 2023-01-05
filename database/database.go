@@ -30,13 +30,13 @@ func ConnectDB() error {
 	// fmt.Println(host + port + user)
 
 	// postgresql://${{ PGUSER }}:${{ PGPASSWORD }}@${{ PGHOST }}:${{ PGPORT }}/${{ PGDATABASE }}
-	url := "//postgres:Ra4uTQDKbj5mZNyDsMfn@containers-us-west-89.railway.app:6607/railway"
+	url := "postgresql://postgres:Ra4uTQDKbj5mZNyDsMfn@containers-us-west-89.railway.app:6607/railway"
 
 	// psqlInfo := fmt.Sprintf("postgresql://%s:%s@%s:%s/%s",
 	// 	user, password, host, port, dbname)
 	fmt.Println(url)
 
-	db, err := sql.Open("postgres", url)
+	db, err := sql.Open("pg", url)
 	if err != nil {
 		panic(err)
 	}
