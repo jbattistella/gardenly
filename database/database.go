@@ -38,13 +38,13 @@ func ConnectDB() error {
 
 	db, err := sql.Open("pg", url)
 	if err != nil {
-		panic(err)
+		fmt.Println("here")
 	}
 	defer db.Close()
 
 	err = db.Ping()
 	if err != nil {
-		panic(err)
+		fmt.Println("there")
 	}
 
 	return nil
