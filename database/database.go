@@ -27,6 +27,9 @@ func ConnectDB() error {
 	user := os.Getenv("PGUSER")
 	password := os.Getenv("PGPASSWORD")
 	dbname := os.Getenv("PGDATABASE")
+	fmt.Println(host + port + user)
+
+	// postgresql://${{ PGUSER }}:${{ PGPASSWORD }}@${{ PGHOST }}:${{ PGPORT }}/${{ PGDATABASE }}
 
 	psqlInfo := fmt.Sprintf("postgresql://%s:%s@%s:%s/%s",
 		user, password, host, port, dbname)
