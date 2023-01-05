@@ -32,7 +32,7 @@ func ConnectDB() error {
 		user, password, host, port, dbname)
 	fmt.Println(psqlInfo)
 
-	db, err := sql.Open("pg", psqlInfo)
+	db, err := sql.Open("postgres", psqlInfo)
 	if err != nil {
 		fmt.Println("here")
 	}
