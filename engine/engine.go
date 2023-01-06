@@ -15,7 +15,7 @@ type AppResponse struct {
 	Vegetables []database.Vegetable
 }
 
-func (a AppResponse) Engine() {
+func Engine() AppResponse {
 	zipCode := 36525
 	postalInfo, err := client.GetPostalInfo(zipCode)
 	if err != nil {
@@ -27,9 +27,16 @@ func (a AppResponse) Engine() {
 	}
 	dTFrost, err := client.GetDatesByTemperature(station, 0)
 
-	if dTFrost.LastFrost > 0 {
+	var a AppResponse
+
+	if dTFrost.LastFrost < 0 {
 		a = AppResponse{
 			Vegetables: getCropsToPlant(dTFrost.LastFrost),
+		}
+	}
+	if dTFrost.LastFrost < 65 && dTFrost.LastFrost > 45 {
+		a = AppResponse{
+			Msg1: "Prepare for spring!",
 		}
 	}
 	if dTFrost.FirstFrost > 0 && dTFrost.LastFrost < 0 {
@@ -65,6 +72,7 @@ func (a AppResponse) Engine() {
 			Msg3: fmt.Sprintf("There are %0.0f days until the last frost \n Check back in at %0.0f days", lastFrost, (lastFrost - 45)),
 		}
 	}
+	return a
 }
 
 func getCropsToPlant(days float64) []database.Vegetable {
@@ -72,15 +80,9 @@ func getCropsToPlant(days float64) []database.Vegetable {
 	if err != nil {
 		log.Fatal("error connecting to DB")
 	}
-	var veg []database.Vegetable
+	var vegetables []database.Vegetable
 
-	// dayString := strconv.Itoa(int(days))
+	_ = DB.Where("dtm < ?", days).Find(&vegetables)
 
-	if err := DB.Where("dtm < ?", "60").Find(&veg); err != nil {
-		log.Fatal(err)
-	}
-
-	// fmt.Println(&]veg)
-
-	return veg
+	return vegetables
 }
