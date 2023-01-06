@@ -32,12 +32,6 @@ func ConnectDB() (*gorm.DB, error) {
 	// 	user, password, host, port, dbname)
 	// fmt.Println(psqlInfo)
 
-	// db, err := sql.Open("postgres", psqlInfo)
-	// if err != nil {
-	// 	fmt.Println("here")
-	// }
-	// defer db.Close()
-
 	// err = db.Ping()
 	// if err != nil {
 	// fmt.Println("there")
