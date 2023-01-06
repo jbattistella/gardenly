@@ -7,7 +7,10 @@ import (
 )
 
 func main() {
-	res := engine.Engine()
+
+	var res engine.AppResponse
+
+	res.Engine()
 
 	fmt.Println(res)
 
