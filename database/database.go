@@ -7,21 +7,18 @@ import (
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 
-	"github.com/go-pg/pg"
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 )
 
-var DB *pg.DB
-
-func ConnectDB() error {
+func ConnectDB() (*gorm.DB, error) {
 	if err := godotenv.Load(); err != nil {
 		log.Fatal(err)
 	}
 
-	var dsn = "postgresql://" + os.Getenv("PGUSER") + os.Getenv("PGPASS") + "@" + os.Getenv("PGHOST") + ":" + os.Getenv("PGPORT") + "/railway"
+	var url = "postgresql://" + os.Getenv("PGUSER") + os.Getenv("PGPASS") + "@" + os.Getenv("PGHOST") + ":" + os.Getenv("PGPORT") + "/railway"
 
-	_, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	DB, err := gorm.Open(postgres.Open(url), &gorm.Config{})
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -46,7 +43,7 @@ func ConnectDB() error {
 	// fmt.Println("there")
 	// }
 
-	return nil
+	return DB, nil
 }
 
 // func UpdateDateDataBase() {

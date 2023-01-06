@@ -68,16 +68,19 @@ func (a AppResponse) Engine() {
 }
 
 func getCropsToPlant(days float64) []database.Vegetable {
-	if err := database.ConnectDB(); err != nil {
+	DB, err := database.ConnectDB()
+	if err != nil {
 		log.Fatal("error connecting to DB")
 	}
 	var veg []database.Vegetable
 
-	if err := database.DB.Model(&veg).Where("dtm < ?", int(days)).Select(); err != nil {
+	// dayString := strconv.Itoa(int(days))
+
+	if err := DB.Where("dtm < ?", "60").Find(&veg); err != nil {
 		log.Fatal(err)
 	}
 
-	defer database.DB.Close()
+	// fmt.Println(&]veg)
 
 	return veg
 }
