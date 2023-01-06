@@ -25,18 +25,6 @@ func ConnectDB() (*gorm.DB, error) {
 
 	log.Println("Sucessfully created the PostgreSQL server!")
 
-	// postgresql://${{ PGUSER }}:${{ PGPASSWORD }}@${{ PGHOST }}:${{ PGPORT }}/${{ PGDATABASE }}
-	// url := "postgresql://postgres:Ra4uTQDKbj5mZNyDsMfn@containers-us-west-89.railway.app:6607/railway"
-
-	// psqlInfo := fmt.Sprintf("postgresql://%s:%s@%s:%s/%s",
-	// 	user, password, host, port, dbname)
-	// fmt.Println(psqlInfo)
-
-	// err = db.Ping()
-	// if err != nil {
-	// fmt.Println("there")
-	// }
-
 	return DB, nil
 }
 

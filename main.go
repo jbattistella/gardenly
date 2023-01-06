@@ -8,11 +8,24 @@ import (
 
 func main() {
 
-	var res engine.AppResponse
+	var res = engine.AppResponse{}
 
-	res.Engine()
+	res = engine.Engine()
 
-	fmt.Println(res)
+	if res.Msg1 != "" {
+		fmt.Println(res.Msg1)
+	}
+	if res.Msg2 != "" {
+		fmt.Println(res.Msg2)
+	}
+	if res.Msg3 != "" {
+		fmt.Println(res.Msg3)
+	}
+	if res.Vegetables != nil {
+		for veg := range res.Vegetables {
+			fmt.Println(res.Vegetables[veg].CommonName)
+		}
+	}
 
 	//set up router
 
