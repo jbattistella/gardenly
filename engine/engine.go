@@ -15,7 +15,7 @@ type AppResponse struct {
 	Vegetables []database.Vegetable
 }
 
-func Engine() AppResponse {
+func (a AppResponse) Engine() {
 	zipCode := 36525
 	postalInfo, err := client.GetPostalInfo(zipCode)
 	if err != nil {
@@ -27,17 +27,13 @@ func Engine() AppResponse {
 	}
 	dTFrost, err := client.GetDatesByTemperature(station, 0)
 
-	//create var of type response
-	var response AppResponse
-
 	if dTFrost.LastFrost > 0 {
-		response = AppResponse{
+		a = AppResponse{
 			Vegetables: getCropsToPlant(dTFrost.LastFrost),
 		}
-
 	}
 	if dTFrost.FirstFrost > 0 && dTFrost.LastFrost < 0 {
-		response = AppResponse{
+		a = AppResponse{
 			Vegetables: getCropsToPlant(dTFrost.FirstFrost),
 		}
 	}
@@ -45,7 +41,7 @@ func Engine() AppResponse {
 		dTFrost, err = client.GetDatesByTemperature(station, 1)
 		lastFrost := dTFrost.LastFrost
 
-		response = AppResponse{
+		a = AppResponse{
 			Msg1: "Winter is coming",
 			Msg2: "Garlic and Onions can be planted in the fall and winter for spring harvest",
 			Msg3: fmt.Sprintf("There are %0.0f days until the last frost \n Check back in at %0.0f days", lastFrost, (lastFrost - 45)),
@@ -54,7 +50,7 @@ func Engine() AppResponse {
 	if dTFrost.FirstFrost < (-30) {
 		dTFrost, err = client.GetDatesByTemperature(station, 1)
 		lastFrost := dTFrost.LastFrost
-		response = AppResponse{
+		a = AppResponse{
 			Msg1: "Winter is coming",
 			Msg2: "Garlic and Onions can be planted in the fall and winter",
 			Msg3: fmt.Sprintf("There are %0.0f days until the last frost \n Check back in at %0.0f days", lastFrost, (lastFrost - 45)),
@@ -63,25 +59,25 @@ func Engine() AppResponse {
 	if dTFrost.FirstFrost < -60 {
 		dTFrost, err = client.GetDatesByTemperature(station, 1)
 		lastFrost := dTFrost.LastFrost
-		response = AppResponse{
+		a = AppResponse{
 			Msg1: "Winter is coming",
 			Msg2: "Garlic and Onions can be planted in the fall and winter \n Order you seeds and prepare garden areas for spring planting",
 			Msg3: fmt.Sprintf("There are %0.0f days until the last frost \n Check back in at %0.0f days", lastFrost, (lastFrost - 45)),
 		}
 	}
-
-	return response
 }
 
 func getCropsToPlant(days float64) []database.Vegetable {
-	database.ConnectDB()
+	if err := database.ConnectDB(); err != nil {
+		log.Fatal("error connecting to DB")
+	}
 	var veg []database.Vegetable
-	// var v models.Vegetable
 
-	err := database.DB.Model(&veg).Where("dtm < ?", int(days)).Select()
-	if err != nil {
+	if err := database.DB.Model(&veg).Where("dtm < ?", int(days)).Select(); err != nil {
 		log.Fatal(err)
 	}
+
+	defer database.DB.Close()
 
 	return veg
 }
