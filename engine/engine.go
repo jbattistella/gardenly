@@ -17,7 +17,7 @@ type AppResponse struct {
 }
 
 func Engine(zip string) AppResponse {
-	// zipCode := 36525
+
 	zipCode, err := strconv.Atoi(zip)
 	if err != nil {
 		log.Fatal(err)
