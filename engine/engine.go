@@ -3,20 +3,25 @@ package engine
 import (
 	"fmt"
 	"log"
+	"strconv"
 
 	"github.com/jbattistella/capstone-project/client"
 	"github.com/jbattistella/capstone-project/database"
 )
 
 type AppResponse struct {
-	Msg1       string
-	Msg2       string
-	Msg3       string
-	Vegetables []database.Vegetable
+	Msg1       string               `json:"msg1"`
+	Msg2       string               `json:"msg2"`
+	Msg3       string               `json:"Msg3"`
+	Vegetables []database.Vegetable `json:"vegetables"`
 }
 
-func Engine() AppResponse {
-	zipCode := 36525
+func Engine(zip string) AppResponse {
+	// zipCode := 36525
+	zipCode, err := strconv.Atoi(zip)
+	if err != nil {
+		log.Fatal(err)
+	}
 	postalInfo, err := client.GetPostalInfo(zipCode)
 	if err != nil {
 		log.Fatal(err)
