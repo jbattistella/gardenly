@@ -18,6 +18,10 @@ func getGardenMsgHandler(w http.ResponseWriter, r *http.Request) {
 	UserId := params["zipcode"]
 
 	res := engine.Engine(UserId)
+	
+	if err := json.NewEncoder(w).Encode(res); err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+	}
 }
 
 func main() {
