@@ -19,32 +19,6 @@ func getGardenMsgHandler(w http.ResponseWriter, r *http.Request) {
 
 	res := engine.Engine(UserId)
 }
-func main() {
-
-
-	var res = engine.AppResponse{}
-
-	res = engine.Engine()
-
-	if res.Msg1 != "" {
-		fmt.Println(res.Msg1)
-	}
-	if res.Msg2 != "" {
-		fmt.Println(res.Msg2)
-	}
-	if res.Msg3 != "" {
-		fmt.Println(res.Msg3)
-	}
-	if res.Vegetables != nil {
-		for veg := range res.Vegetables {
-			fmt.Println(res.Vegetables[veg].CommonName)
-		}
-	}
-
-	if err := json.NewEncoder(w).Encode(res); err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-	}
-}
 
 func main() {
 	// res := engine.Engine()
