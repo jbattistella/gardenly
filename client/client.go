@@ -50,6 +50,7 @@ func (pci *PostalCodeInfo) GetStation() (string, error) {
 		log.Fatal(err)
 	}
 	station := info[0].ID
+	fmt.Println(station)
 
 	return station, nil
 }
@@ -73,6 +74,8 @@ func GetDatesByTemperature(id string, y int) (DaysFromFrost, error) {
 		log.Fatal(err)
 	}
 
+	fmt.Println(springDates)
+
 	url2 := fmt.Sprintf("https://api.farmsense.net/v1/frostdates/probabilities/?station=%s&season=%s", id, "2")
 	req2, err := http.NewRequest("GET", url2, nil)
 	if err != nil {
@@ -89,6 +92,7 @@ func GetDatesByTemperature(id string, y int) (DaysFromFrost, error) {
 	if err = json.NewDecoder(res2.Body).Decode(&fallDates); err != nil {
 		log.Fatal(err)
 	}
+	fmt.Println("fall", fallDates)
 
 	daysFromLastFrost := DaysFrom(springDates[0].Prob90, y)
 	daysFromFirstFrost := DaysFrom(fallDates[0].Prob90, y)
