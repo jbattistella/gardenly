@@ -50,6 +50,7 @@ func (pci *PostalCodeInfo) GetStation() (string, error) {
 		log.Fatal(err)
 	}
 	station := info[0].ID
+	fmt.Println(station)
 
 	return station, nil
 }

@@ -17,7 +17,25 @@ func getGardenMsgHandler(w http.ResponseWriter, r *http.Request) {
 
 	res := engine.Engine(UserId)
 
-	if err := json.NewEncoder(w).Encode(res); err != nil {
+	var display string
+
+	if res.Msg1 != "" {
+		display = res.Msg1
+	}
+	if res.Msg2 != "" {
+		display = display + res.Msg2
+	}
+	if res.Msg3 != "" {
+		display = display + res.Msg3
+	}
+	if res.Vegetables != nil {
+		for _, x := range res.Vegetables {
+			display = display + x.CommonName
+		}
+
+	}
+
+	if err := json.NewEncoder(w).Encode(display); err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 	}
 }

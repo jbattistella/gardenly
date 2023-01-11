@@ -22,10 +22,12 @@ func Engine(zip string) AppResponse {
 	if err != nil {
 		log.Fatal(err)
 	}
+
 	postalInfo, err := client.GetPostalInfo(zipCode)
 	if err != nil {
 		log.Fatal(err)
 	}
+
 	station, err := postalInfo.GetStation()
 	if err != nil {
 		log.Fatal(err)
