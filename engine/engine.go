@@ -27,7 +27,7 @@ func Engine(zip string) AppResponse {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(postalInfo)
+
 	station, err := postalInfo.GetStation()
 	if err != nil {
 		log.Fatal(err)
