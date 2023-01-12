@@ -14,15 +14,15 @@ func TestGetPostalInfo(t *testing.T) {
 		res, err := GetPostalInfo(36525)
 		assert.NoError(t, err)
 		assert.Equal(t, PostalCodeInfo{
-			PostCode:            "36525",
+			PostCode:            "35205",
 			Country:             "United States",
 			CountryAbbreviation: "US",
 			Places: []PlaceInfo{PlaceInfo{
-				PlaceName:         "Creola",
-				Longitude:         "-88.0174",
+				PlaceName:         "Birmingham",
+				Longitude:         "-86.8059",
 				State:             "Alabama",
 				StateAbbreviation: "AL",
-				Latitude:          "30.9013",
+				Latitude:          "33.4951",
 			}}}, res)
 	})
 }
@@ -32,19 +32,19 @@ func TestGetStation(t *testing.T) {
 	t.Run("OK", func(t *testing.T) {
 
 		testInfo := PostalCodeInfo{
-			PostCode:            "36525",
+			PostCode:            "35205",
 			Country:             "United States",
 			CountryAbbreviation: "US",
 			Places: []PlaceInfo{PlaceInfo{
-				PlaceName:         "Creola",
-				Longitude:         "-88.0174",
+				PlaceName:         "Birmingham",
+				Longitude:         "-86.8059",
 				State:             "Alabama",
 				StateAbbreviation: "AL",
-				Latitude:          "30.9013",
+				Latitude:          "33.4951",
 			}}}
 		res, err := testInfo.GetStation()
 		assert.NoError(t, err)
-		assert.Equal(t, "10583", res)
+		assert.Equal(t, "10831", res)
 	})
 }
 

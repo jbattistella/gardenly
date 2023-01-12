@@ -33,6 +33,7 @@ func GetPostalInfo(zip int) (PostalCodeInfo, error) {
 		return PostalCodeInfo{}, errors.New("invalid zip code")
 
 	}
+	fmt.Println(info)
 
 	return info, nil
 
@@ -62,6 +63,8 @@ func (pci *PostalCodeInfo) GetStation() (string, error) {
 		log.Fatal(err)
 	}
 	station := info[0].ID
+
+	fmt.Println(station)
 
 	return station, nil
 }
