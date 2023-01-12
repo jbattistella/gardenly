@@ -36,8 +36,6 @@ func Engine(zip string) (AppResponse, error) {
 	}
 	dTFrost, err := client.GetDatesByTemperature(station, 0)
 
-	fmt.Println(dTFrost.LastFrost) //74
-
 	if dTFrost.LastFrost > 0 {
 		a = AppResponse{
 			Msg1: fmt.Sprintf("%d days until the last frost.", int(dTFrost.LastFrost)),
