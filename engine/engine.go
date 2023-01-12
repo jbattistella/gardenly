@@ -43,33 +43,35 @@ func Engine(zip string) (AppResponse, error) {
 			Msg1: fmt.Sprintf("%d days until the last frost.", int(dTFrost.LastFrost)),
 		}
 	}
+	if dTFrost.LastFrost < 45 && dTFrost.LastFrost > 0 {
+		a = AppResponse{
+			Msg1:       fmt.Sprintf("%d days until the last frost.", int(dTFrost.LastFrost)),
+			Vegetables: getCropsToPlant(dTFrost.FirstFrost),
+		}
+		fmt.Println(dTFrost.FirstFrost)
+	}
 	if dTFrost.LastFrost > 45 {
 		daysToSeeding := int(dTFrost.LastFrost) - 45
 		a = AppResponse{
 			Msg1: fmt.Sprintf("%d days until the last frost. Check back in %d days.", int(dTFrost.LastFrost), daysToSeeding),
 		}
 	}
-	if dTFrost.LastFrost < 45 && dTFrost.LastFrost > 0 {
-		a = AppResponse{
-			Msg1:       fmt.Sprintf("%d days until the last frost.", int(dTFrost.LastFrost)),
-			Vegetables: getCropsToPlant(dTFrost.FirstFrost),
-		}
-		fmt.Println(getCropsToPlant(dTFrost.FirstFrost))
-		fmt.Println(dTFrost.FirstFrost)
-	}
+	// if dTFrost.LastFrost < 65 && dTFrost.LastFrost > 45 {
+	// 	a = AppResponse{
+	// 		Msg1: "Prepare for spring!",
+	// 	}
+	// }
+	//frost free
+
 	if dTFrost.LastFrost < 0 {
 		a = AppResponse{
 			Msg1:       fmt.Sprintf("%d days until the last frost.", int(dTFrost.FirstFrost)),
 			Vegetables: getCropsToPlant(dTFrost.LastFrost),
 		}
 	}
-	if dTFrost.LastFrost < 65 && dTFrost.LastFrost > 45 {
-		a = AppResponse{
-			Msg1: "Prepare for spring!",
-		}
-	}
 	if dTFrost.FirstFrost > 0 && dTFrost.LastFrost < 0 {
 		a = AppResponse{
+			Msg1:       "We are into the growing season. Plant slow and steady.",
 			Vegetables: getCropsToPlant(dTFrost.FirstFrost),
 		}
 	}

@@ -7,6 +7,7 @@ import (
 	"log"
 	"math"
 	"net/http"
+	"strconv"
 	"time"
 )
 
@@ -39,6 +40,12 @@ func GetPostalInfo(zip int) (PostalCodeInfo, error) {
 
 func (pci *PostalCodeInfo) GetStation() (string, error) {
 
+	latInt, _ := strconv.ParseFloat(pci.Places[0].Latitude, 64)
+
+	if latInt < 31.0 {
+		return "", errors.New("zipcode currently not supported")
+	}
+
 	url := fmt.Sprintf("https://api.farmsense.net/v1/frostdates/stations/?lat=%s&lon=%s", pci.Places[0].Latitude, pci.Places[0].Longitude)
 
 	req, err := http.NewRequest("GET", url, nil)
@@ -55,7 +62,6 @@ func (pci *PostalCodeInfo) GetStation() (string, error) {
 		log.Fatal(err)
 	}
 	station := info[0].ID
-	fmt.Println(station)
 
 	return station, nil
 }
