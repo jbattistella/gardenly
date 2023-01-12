@@ -1,42 +1,49 @@
 package main
 
 import (
-	"encoding/json"
+	"html/template"
 	"log"
 	"net/http"
 
 	"github.com/gorilla/mux"
+	"github.com/jbattistella/capstone-project/database"
 	"github.com/jbattistella/capstone-project/engine"
 )
 
 func getGardenMsgHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
+
+	type Reply struct {
+		Messages   string
+		Vegetables []database.Vegetable
+	}
+
+	type ErrPage struct {
+		Message error
+	}
 
 	params := mux.Vars(r)
 	UserId := params["zipcode"]
 
-	res := engine.Engine(UserId)
-
-	var display string
-
-	if res.Msg1 != "" {
-		display = res.Msg1
-	}
-	if res.Msg2 != "" {
-		display = display + res.Msg2
-	}
-	if res.Msg3 != "" {
-		display = display + res.Msg3
-	}
-	if res.Vegetables != nil {
-		for _, x := range res.Vegetables {
-			display = display + x.CommonName
+	res, err := engine.Engine(UserId)
+	if err != nil {
+		er := ErrPage{Message: err}
+		t, _ := template.ParseFiles("errpage.html")
+		if err := t.Execute(w, er); err != nil {
+			log.Fatal(err)
 		}
-
+		return
 	}
 
-	if err := json.NewEncoder(w).Encode(display); err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+	msg := res.Msg1 + res.Msg2 + res.Msg3
+
+	rep := Reply{
+		Messages:   msg,
+		Vegetables: res.Vegetables,
+	}
+
+	t, _ := template.ParseFiles("gardenly.html")
+	if err := t.Execute(w, rep); err != nil {
+		log.Fatal(err)
 	}
 }
 
@@ -44,7 +51,7 @@ func main() {
 
 	r := mux.NewRouter()
 
-	r.HandleFunc("/gardenly/{zipcode}", getGardenMsgHandler).Methods("GET")
+	r.HandleFunc("/gardenly/{zipcode}", getGardenMsgHandler)
 
 	log.Println("Listening on port 8080")
 	log.Fatal(http.ListenAndServe(":8080", r))
