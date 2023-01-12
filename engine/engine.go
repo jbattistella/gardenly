@@ -12,32 +12,54 @@ import (
 type AppResponse struct {
 	Msg1       string               `json:"msg1"`
 	Msg2       string               `json:"msg2"`
-	Msg3       string               `json:"Msg3"`
+	Msg3       string               `json:"msg3"`
+	Masg4      error                `json:"Msg4"`
 	Vegetables []database.Vegetable `json:"vegetables"`
 }
 
-func Engine(zip string) AppResponse {
+func Engine(zip string) (AppResponse, error) {
+	var a AppResponse
 
 	zipCode, err := strconv.Atoi(zip)
 	if err != nil {
-		log.Fatal(err)
+		return AppResponse{}, err
 	}
 
 	postalInfo, err := client.GetPostalInfo(zipCode)
 	if err != nil {
-		log.Fatal(err)
+		return AppResponse{}, err
 	}
 
 	station, err := postalInfo.GetStation()
 	if err != nil {
-		log.Fatal(err)
+		return AppResponse{}, err
 	}
 	dTFrost, err := client.GetDatesByTemperature(station, 0)
 
-	var a AppResponse
+	fmt.Println(dTFrost.LastFrost) //74
 
+	if dTFrost.LastFrost > 0 {
+		a = AppResponse{
+			Msg1: fmt.Sprintf("%d days until the last frost.", int(dTFrost.LastFrost)),
+		}
+	}
+	if dTFrost.LastFrost > 45 {
+		daysToSeeding := int(dTFrost.LastFrost) - 45
+		a = AppResponse{
+			Msg1: fmt.Sprintf("%d days until the last frost. Check back in %d days.", int(dTFrost.LastFrost), daysToSeeding),
+		}
+	}
+	if dTFrost.LastFrost < 45 && dTFrost.LastFrost > 0 {
+		a = AppResponse{
+			Msg1:       fmt.Sprintf("%d days until the last frost.", int(dTFrost.LastFrost)),
+			Vegetables: getCropsToPlant(dTFrost.FirstFrost),
+		}
+		fmt.Println(getCropsToPlant(dTFrost.FirstFrost))
+		fmt.Println(dTFrost.FirstFrost)
+	}
 	if dTFrost.LastFrost < 0 {
 		a = AppResponse{
+			Msg1:       fmt.Sprintf("%d days until the last frost.", int(dTFrost.FirstFrost)),
 			Vegetables: getCropsToPlant(dTFrost.LastFrost),
 		}
 	}
@@ -58,7 +80,7 @@ func Engine(zip string) AppResponse {
 		a = AppResponse{
 			Msg1: "Winter is coming",
 			Msg2: "Garlic and Onions can be planted in the fall and winter for spring harvest",
-			Msg3: fmt.Sprintf("There are %0.0f days until the last frost \n Check back in at %0.0f days", lastFrost, (lastFrost - 45)),
+			Msg3: fmt.Sprintf("There are %0.0f days until the last frost. Check back in at %0.0f days", lastFrost, (lastFrost - 45)),
 		}
 	}
 	if dTFrost.FirstFrost < (-30) {
@@ -67,7 +89,7 @@ func Engine(zip string) AppResponse {
 		a = AppResponse{
 			Msg1: "Winter is coming",
 			Msg2: "Garlic and Onions can be planted in the fall and winter",
-			Msg3: fmt.Sprintf("There are %0.0f days until the last frost \n Check back in at %0.0f days", lastFrost, (lastFrost - 45)),
+			Msg3: fmt.Sprintf("There are %0.0f days until the last frost. Check back in at %0.0f days", lastFrost, (lastFrost - 45)),
 		}
 	}
 	if dTFrost.FirstFrost < -60 {
@@ -75,11 +97,11 @@ func Engine(zip string) AppResponse {
 		lastFrost := dTFrost.LastFrost
 		a = AppResponse{
 			Msg1: "Winter is coming",
-			Msg2: "Garlic and Onions can be planted in the fall and winter \n Order you seeds and prepare garden areas for spring planting",
-			Msg3: fmt.Sprintf("There are %0.0f days until the last frost \n Check back in at %0.0f days", lastFrost, (lastFrost - 45)),
+			Msg2: "Garlic and Onions can be planted in the fall and winter. Order you seeds and prepare garden areas for spring planting",
+			Msg3: fmt.Sprintf("There are %0.0f days until the last frost. Check back in at %0.0f days", lastFrost, (lastFrost - 45)),
 		}
 	}
-	return a
+	return a, nil
 }
 
 func getCropsToPlant(days float64) []database.Vegetable {

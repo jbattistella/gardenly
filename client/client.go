@@ -2,6 +2,7 @@ package client
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"log"
 	"math"
@@ -21,11 +22,15 @@ func GetPostalInfo(zip int) (PostalCodeInfo, error) {
 	if err != nil {
 		return PostalCodeInfo{}, err
 	}
-
 	defer res.Body.Close()
 	var info PostalCodeInfo
+
 	if err = json.NewDecoder(res.Body).Decode(&info); err != nil {
 		return PostalCodeInfo{}, err
+	}
+	if info.Country == "" {
+		return PostalCodeInfo{}, errors.New("invalid zip code")
+
 	}
 
 	return info, nil
