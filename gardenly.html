@@ -1,20 +1,17 @@
-
-<h1>{{ "Welcome to Gardenly" }}</h1>
-<p>{{ .Messages }}</p>
-<p>{{ .VegHeader }}</p>
-<li>{{ .V1 }}</li>
-<li>{{ .V2 }}</li>
-<li>{{ .V3 }}</li>
-<li>{{ .V4 }}</li>
-<li>{{ .V5 }}</li>
-<li>{{ .V6 }}</li>
-<li>{{ .V7 }}</li>
-<li>{{ .V8 }}</li>
-<li>{{ .V9 }}</li>
-<li>{{ .V10 }}</li>
-<li>{{ .V11 }}</li>
-<li>{{ .V12 }}</li>
-<li>{{ .V13 }}</li>
-<li>{{ .V14 }}</li>
+<html lang="en">
+    <header><b>{{ .Messages }}</b></header>
+<body>
+    <table>
+        <tr>
+            <td><b>{{ .VegHeader }}</b></td>
+        </tr>
+        {{ range $v := .Vegetables }}
+            <tr>
+                <td>{{ $v }}</td>
+            </tr>
+        {{ end}}
+    </table>
+</body>
+</html>
 
 
