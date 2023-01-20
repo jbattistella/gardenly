@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"html/template"
 	"log"
 	"net/http"
@@ -12,22 +13,9 @@ import (
 func getGardenMsgHandler(w http.ResponseWriter, r *http.Request) {
 
 	type Reply struct {
-		Messages  string
-		VegHeader string
-		V1        string
-		V2        string
-		V3        string
-		V4        string
-		V5        string
-		V6        string
-		V7        string
-		V8        string
-		V9        string
-		V10       string
-		V11       string
-		V12       string
-		V13       string
-		V14       string
+		Messages   string
+		VegHeader  string
+		Vegetables []string
 	}
 
 	type ErrPage struct {
@@ -40,12 +28,14 @@ func getGardenMsgHandler(w http.ResponseWriter, r *http.Request) {
 	res, err := engine.Engine(UserId)
 	if err != nil {
 		er := ErrPage{Message: err}
-		t, _ := template.ParseFiles("errpage.html")
+		t, _ := template.ParseFiles("htmlPages/errpage.html")
 		if err := t.Execute(w, er); err != nil {
 			log.Fatal(err)
 		}
 		return
 	}
+
+	var rep Reply
 
 	msg := res.Msg1 + res.Msg2 + res.Msg3
 
@@ -55,38 +45,57 @@ func getGardenMsgHandler(w http.ResponseWriter, r *http.Request) {
 		vegNames = append(vegNames, v.CommonName)
 	}
 
-	var rep Reply
-
 	if len(vegNames) == 0 {
 		rep = Reply{
-			Messages:  msg,
-			VegHeader: "You can seed the following:",
+			Messages: msg,
 		}
 	} else {
 		rep = Reply{
-			Messages:  msg,
-			VegHeader: "You can seed the following:",
-			V1:        vegNames[0],
-			V2:        vegNames[1],
-			V3:        vegNames[2],
-			V4:        vegNames[3],
-			V5:        vegNames[4],
-			V6:        vegNames[5],
-			V7:        vegNames[6],
-			V8:        vegNames[7],
-			V9:        vegNames[8],
-			V10:       vegNames[9],
-			V11:       vegNames[10],
-			V12:       vegNames[11],
-			V13:       vegNames[12],
-			V14:       vegNames[13],
+			Messages:   msg,
+			VegHeader:  "You can seed the following:",
+			Vegetables: vegNames,
 		}
 	}
 
-	t, _ := template.ParseFiles("gardenly.html")
+	t, _ := template.ParseFiles("html/gardenly.html")
 	if err := t.Execute(w, rep); err != nil {
 		log.Fatal(err)
 	}
+}
+
+func GardenlyHome(w http.ResponseWriter, r *http.Request) {
+	http.ServeFile(w, r, "html/homepage.html")
+}
+
+func getDemoGardenMsgHandler(w http.ResponseWriter, r *http.Request) {
+
+	type Reply struct {
+		Messages   string
+		VegHeader  string
+		Vegetables []string
+	}
+
+	type ErrPage struct {
+		Message error
+	}
+
+	rep := Reply{
+		Messages:   "There are 60 days until the first frost",
+		Vegetables: []string{"carrot", "beats", "cilantro", "parsley"},
+	}
+
+	t, _ := template.ParseFiles("html/gardenly.html")
+	if err := t.Execute(w, &rep); err != nil {
+		log.Fatal(err)
+	}
+}
+func GardenlyHomeSubmission(w http.ResponseWriter, r *http.Request) {
+	r.ParseForm()
+
+	zipcode := r.FormValue("zipcode")
+
+	http.Redirect(w, r, fmt.Sprintf("/gardenly/%s", zipcode), http.StatusFound)
+
 }
 
 func notZero(s string) string {
@@ -101,6 +110,9 @@ func main() {
 	r := mux.NewRouter()
 
 	r.HandleFunc("/gardenly/{zipcode}", getGardenMsgHandler)
+	r.HandleFunc("/test/", getDemoGardenMsgHandler)
+	r.HandleFunc("/", GardenlyHome).Methods("GET")
+	r.HandleFunc("/", GardenlyHomeSubmission).Methods("POST")
 
 	log.Println("Listening on port 8080")
 	log.Fatal(http.ListenAndServe(":8080", r))
