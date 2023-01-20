@@ -1,2 +1,41 @@
-<h1>{{ "Welcome to Gardenly" }}</h1>
-<p>{{ .Message }}</p>
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>gardenly</title>
+        <style type="text/css">
+            h1 { 
+                font-family: Verdana, Geneva, Tahoma, sans-serif;
+                text-align: center;
+                font-style: italic;
+                font-size: 45pt;
+                font-weight: Bold;
+                color: green;
+                margin: 0;
+                padding: 0;
+            }
+            body { 
+                font-family: Verdana, Geneva, Tahoma, sans-serif;
+                text-align: center;
+                margin: 5%;
+                color: #8f0303;
+            }
+            button { 
+
+                font-size: 12pt;
+                margin-top: 2cm;
+                padding: 5px;
+            }
+          </style>
+    </head>
+</html>
+<html lang="en">
+    <h1>Gardenly</h1>
+<body>
+    <h2 style="font-size:2em"><b>{{ .Message }}</b></h2>
+    <p>Currently zip codes below the 31st parallel are not supported by Gardenly</p>
+    <form method="get" action="/">
+        <button type="submit">Home</button>
+    </form>
+</body>
+</html>
+
