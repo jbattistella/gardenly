@@ -28,7 +28,7 @@ func getGardenMsgHandler(w http.ResponseWriter, r *http.Request) {
 	res, err := engine.Engine(UserId)
 	if err != nil {
 		er := ErrPage{Message: err}
-		t, _ := template.ParseFiles("htmlPages/errpage.html")
+		t, _ := template.ParseFiles("html/errpage.html")
 		if err := t.Execute(w, er); err != nil {
 			log.Fatal(err)
 		}
