@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>gardenly</title>
+        <style type="text/css">
+            h1 { font-family: Verdana, Geneva, Tahoma, sans-serif;
+                font-style: italic;
+                font-size: 45pt;
+                font-weight: Bold;
+                color: green;
+                margin: 5%;
+                padding: 0;
+            }
+            body { font-family: Verdana, Geneva, Tahoma, sans-serif;
+                margin: 5%;
+                color: #000000;
+            }
+            table, tr, td{
+                border-collapse: collapse;
+                border: 1px solid #000000;
+            }
+            button { font-size: 12pt;
+                    margin-top: 2cm;
+                    padding: 5px;
+            }
+          </style>
+    </head>
+</html>
+<html lang="en">
+    <h1>Gardenly</h1>
+    <h2 style="font-size:2em"><b>{{ .Messages }}</b></h2>
+<body>
+    <table>
+        <tr>
+            <td><b>{{ .VegHeader }}</b></td>
+        </tr>
+        {{ range $v := .Vegetables }}
+            <tr>
+                <td>{{ $v }}</td>
+            </tr>
+        {{ end}}
+    </table>
+    <form method="get" action="/">
+        <button type="submit">Home</button>
+    </form>
+</body>
+</html>
+
+
