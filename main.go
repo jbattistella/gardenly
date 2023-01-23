@@ -1,17 +1,25 @@
 package main
 
 import (
-	"log"
-
-	"github.com/jbattistella/capstone-project/api"
+	"github.com/jbattistella/capstone-project/server"
 )
 
-func init() {
-	api.GardenlyAPI()
-}
+//using flag to add cli functionality, how can CLI be used to add quality and value to program
+
+// var flagvar string
+
+// func init() {
+// 	flag.StringVar(&flagvar, "flagname", "", "help message for flagname")
+
+// 	flag.Parse()
+
+// 	if flagvar != "" {
+// 		fmt.Printf("flagvar: %v\n", flagvar)
+// 	}
+// }
 
 func main() {
-	if true {
-		log.Println("gardenly api is running")
-	}
+
+	server.GardenAPI()
+
 }
