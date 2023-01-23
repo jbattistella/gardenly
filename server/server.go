@@ -78,34 +78,61 @@ func GardenlyHomeSubmission(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func notZero(s string) string {
-	if len(s) == 0 {
-		return ""
-	}
-	return s
-}
+// func notZero(s string) string {
+// 	if len(s) == 0 {
+// 		return ""
+// 	}
+// 	return s
+// }
 
+// database handles that use gorm orm
 func getVegetables(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	DB, err := database.ConnectDB()
 	if err != nil {
 		log.Fatal("error connecting to DB")
+		w.WriteHeader(http.StatusInternalServerError)
+		return
 	}
-	var veg database.Vegetable
-
-	DB.Find(&veg)
-
-	json.NewEncoder(w).Encode(&veg)
-
+	var vegs []database.Vegetable
+	DB.Find(&vegs)
+	err = json.NewEncoder(w).Encode(&vegs)
+	if err != nil {
+		log.Println(err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
 }
 
-func addVegetableToDatabase(w http.ResponseWriter, r *http.Request) {
-	// w.Header().Set("Content-Type", "application/json")
+func getVegetable(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	params := mux.Vars(r)
 
 	DB, err := database.ConnectDB()
 	if err != nil {
 		log.Fatal("error connecting to DB")
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	var veg database.Vegetable
+	DB.First(&veg, "common_name = ?", params["name"])
+	err = json.NewEncoder(w).Encode(&veg)
+	if err != nil {
+		log.Println(err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+}
+
+func createVegetable(w http.ResponseWriter, r *http.Request) {
+
+	DB, err := database.ConnectDB()
+	if err != nil {
+		log.Fatal("error connecting to DB")
+		w.WriteHeader(http.StatusInternalServerError)
+		return
 	}
 
 	var veg database.Vegetable
@@ -117,9 +144,46 @@ func addVegetableToDatabase(w http.ResponseWriter, r *http.Request) {
 	DB.Create(&veg)
 
 	w.WriteHeader(http.StatusCreated)
-
 }
+func updateVegetable(w http.ResponseWriter, r *http.Request) {
+	DB, err := database.ConnectDB()
+	if err != nil {
+		log.Fatal("error connecting to DB")
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
 
+	var veg database.Vegetable
+	if err := json.NewDecoder(r.Body).Decode(&veg); err != nil {
+		log.Printf("error decoding product: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	DB.Model(&veg).Where("common_name = ?", veg.CommonName).Update("dtm", veg.DTM)
+
+	w.WriteHeader(http.StatusCreated)
+}
+func deleteVegetable(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	DB, err := database.ConnectDB()
+	if err != nil {
+		log.Fatal("error connecting to DB")
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	var veg database.Vegetable
+	if err := json.NewDecoder(r.Body).Decode(&veg); err != nil {
+		log.Printf("error decoding product: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	DB.Where("common_name = ?", params["name"]).Delete(&veg)
+
+	w.WriteHeader(http.StatusOK)
+}
 func GardenAPI() {
 
 	r := mux.NewRouter()
@@ -130,7 +194,10 @@ func GardenAPI() {
 
 	//database
 	r.HandleFunc("/vegetables", getVegetables).Methods("GET")
-	r.HandleFunc("/vegetables", addVegetableToDatabase).Methods("POST")
+	r.HandleFunc("/vegetables/{name}", getVegetable).Methods("GET")
+	r.HandleFunc("/vegetables", createVegetable).Methods("POST")
+	r.HandleFunc("/vegetables", updateVegetable).Methods("PUT")
+	r.HandleFunc("/vegetables/{name}", deleteVegetable).Methods("DELETE")
 
 	log.Println("Listening on port 8080")
 	log.Fatal(http.ListenAndServe(":8080", r))
