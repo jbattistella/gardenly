@@ -1,6 +1,7 @@
 package database
 
 import (
+	"fmt"
 	"log"
 	"os"
 
@@ -20,6 +21,7 @@ func ConnectDB() (*gorm.DB, error) {
 
 	DB, err := gorm.Open(postgres.Open(url), &gorm.Config{})
 	if err != nil {
+		fmt.Printf("Error connecting:%s\n", err)
 		log.Fatal(err)
 	}
 
@@ -28,12 +30,32 @@ func ConnectDB() (*gorm.DB, error) {
 	return DB, nil
 }
 
+// func UpdateDateDataBase(file string) {
+
+// 	DB, err := ConnectDB()
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
+// 	vegs, err := getCSVData()
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
+
+// 	DB.Create(&vegs)
+
+// }
+
 // func UpdateDateDataBase() {
+// 	DB, err := ConnectDB()
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
+
 // 	if err := createVegetableSchema(DB); err != nil {
 // 		log.Fatal(err)
 // 	}
 
-// 	data, err := loadDataBaseWithCsv()
+// 	data, err := getCSVData()
 // 	if err != nil {
 // 		log.Fatal(err)
 // 	}
@@ -62,7 +84,7 @@ func ConnectDB() (*gorm.DB, error) {
 // 	return nil
 // }
 
-// func loadDataBaseWithCsv() ([]Vegetable, error) {
+// func getCSVData() ([]Vegetable, error) {
 
 // 	csvFile, _ := os.Open("vegetables2.csv")
 // 	reader := csv.NewReader(csvFile)

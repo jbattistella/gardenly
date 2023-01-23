@@ -1,12 +1,14 @@
-package api
+package server
 
 import (
+	"encoding/json"
 	"fmt"
 	"html/template"
 	"log"
 	"net/http"
 
 	"github.com/gorilla/mux"
+	"github.com/jbattistella/capstone-project/database"
 	"github.com/jbattistella/capstone-project/engine"
 )
 
@@ -83,13 +85,52 @@ func notZero(s string) string {
 	return s
 }
 
-func GardenlyAPI() {
+func getVegetables(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	DB, err := database.ConnectDB()
+	if err != nil {
+		log.Fatal("error connecting to DB")
+	}
+	var veg database.Vegetable
+
+	DB.Find(&veg)
+
+	json.NewEncoder(w).Encode(&veg)
+
+}
+
+func addVegetableToDatabase(w http.ResponseWriter, r *http.Request) {
+	// w.Header().Set("Content-Type", "application/json")
+
+	DB, err := database.ConnectDB()
+	if err != nil {
+		log.Fatal("error connecting to DB")
+	}
+
+	var veg database.Vegetable
+	if err := json.NewDecoder(r.Body).Decode(&veg); err != nil {
+		log.Printf("error decoding product: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+	}
+
+	DB.Create(&veg)
+
+	w.WriteHeader(http.StatusCreated)
+
+}
+
+func GardenAPI() {
 
 	r := mux.NewRouter()
 
 	r.HandleFunc("/gardenly/{zipcode}", getGardenMsgHandler).Methods("GET")
 	r.HandleFunc("/", GardenlyHome).Methods("GET")
 	r.HandleFunc("/", GardenlyHomeSubmission).Methods("POST")
+
+	//database
+	r.HandleFunc("/vegetables", getVegetables).Methods("GET")
+	r.HandleFunc("/vegetables", addVegetableToDatabase).Methods("POST")
 
 	log.Println("Listening on port 8080")
 	log.Fatal(http.ListenAndServe(":8080", r))
