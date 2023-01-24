@@ -37,9 +37,51 @@
             }
             table {
                 margin: auto;
-                width: 30%;
-                border: 2px solid black;
+                width: 45%;
+                border: 4px solid black;
             }
+            #contain_moon{
+                max-width: 200px;
+                margin: auto;
+                margin-top:25px;
+                text-align: center;
+                color:black;
+                }
+            #contain_moon div{
+                position:relative;
+                z-index: 1;
+                }
+            #contain_moon div:nth-child(1) {
+                /* title */
+                font-size: 24px;
+                font-weight: bold; 
+                }
+            #contain_moon div:nth-child(2) {
+                /* image */
+                margin: 10px 0;
+                filter:drop-shadow(0 0 40px rgb(0, 0, 0));
+                z-index:0;
+                }
+            #contain_moon div:nth-child(3) {
+                /* Name phase  */
+                font-size: 18px;
+                }
+            #contain_moon div:nth-child(4) {
+                /* next full moon */
+                font-style: italic;
+                font-size:12px;  
+                margin-top:10px;
+                border:1px solid #000000;
+                padding:5px;
+                }
+            #contain_moon div:nth-child(4) svg{
+                /* next full moon icon */
+                width: 0;
+                }
+            #contain_moon div:nth-child(4) b{
+                /* next full moon day number */
+                color: rgb(4, 52, 3);
+                }
           </style>
     </head>
 </html>
@@ -68,6 +110,22 @@
         <button type="submit">Home</button>
     </form>
 
+    <!-- © wdisseny --><div id="contain_moon" style="text-align:center;padding-top:5px;padding-bottom:5px;"><div style="font-weight:bold">The moon today</div>
+    <div style="margin-top:-7px;margin-bottom:-15px;padding:30px;filter:drop-shadow(0 0 30px hsl(220,100%,15%))"></div>
+    <div>.</div>
+    <div style="font-size:small">.</div></div>
+    <script>
+    (function()
+    {var d=new Date().getDate();
+    var m=document.querySelectorAll("#contain_moon div");
+    var a=new XMLHttpRequest();
+    var url="https://www.icalendar37.net/lunar/api/?lang=en&month="+(new Date().getMonth()+1)+"&year="+(new Date().getFullYear())+"&size=100&lightColor=rgb(245,245,245)&shadeColor=rgb(17,17,17)&LDZ="+new Date(new Date().getFullYear(),new Date().getMonth(),1)/1000+"";
+    m[1].style.height="100px";a.onreadystatechange=function(){if(a.readyState==4&&a.status==200){var b=JSON.parse(a.responseText);
+    m[1].innerHTML=b.phase[d].svg;
+    if(typeof moon_widget_loaded=="function")moon_widget_loaded(b);
+    m[2].innerHTML=b.phase[d].npWidget;m[3].innerHTML="Next full moon<br>"+b.nextFullMoon}};
+    a.open("GET",url,true);a.send()})()
+    </script>
 
 </html>
 
