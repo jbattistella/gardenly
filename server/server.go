@@ -12,12 +12,14 @@ import (
 	"github.com/jbattistella/capstone-project/engine"
 )
 
+// gardenly ui request handlers
 func getGardenMsgHandler(w http.ResponseWriter, r *http.Request) {
 
 	type Reply struct {
-		Messages   string
-		VegHeader  string
-		Vegetables []string
+		Messages       string
+		PlantingSeason bool
+		VegHeader      string
+		Vegetables     []database.Vegetable
 	}
 
 	type ErrPage struct {
@@ -26,6 +28,8 @@ func getGardenMsgHandler(w http.ResponseWriter, r *http.Request) {
 
 	params := mux.Vars(r)
 	zipCode := params["zipcode"]
+
+	fmt.Println(zipCode)
 
 	res, err := engine.Engine(zipCode)
 	if err != nil {
@@ -38,24 +42,19 @@ func getGardenMsgHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var rep Reply
-
 	msg := res.Msg1 + res.Msg2 + res.Msg3
 
-	var vegNames []string
-	for _, v := range res.Vegetables {
-
-		vegNames = append(vegNames, v.CommonName)
-	}
-
-	if len(vegNames) == 0 {
+	if len(res.Vegetables) == 0 {
 		rep = Reply{
-			Messages: msg,
+			Messages:       msg,
+			PlantingSeason: false,
 		}
 	} else {
 		rep = Reply{
-			Messages:   msg,
-			VegHeader:  "You can seed the following:",
-			Vegetables: vegNames,
+			Messages:       msg,
+			PlantingSeason: true,
+			VegHeader:      "You can seed the following:",
+			Vegetables:     res.Vegetables,
 		}
 	}
 
@@ -64,11 +63,9 @@ func getGardenMsgHandler(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 }
-
 func GardenlyHome(w http.ResponseWriter, r *http.Request) {
 	http.ServeFile(w, r, "html/homepage.html")
 }
-
 func GardenlyHomeSubmission(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 
@@ -78,14 +75,7 @@ func GardenlyHomeSubmission(w http.ResponseWriter, r *http.Request) {
 
 }
 
-// func notZero(s string) string {
-// 	if len(s) == 0 {
-// 		return ""
-// 	}
-// 	return s
-// }
-
-// database handles that use gorm orm
+// gardenly database handlers
 func getVegetables(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
@@ -104,7 +94,6 @@ func getVegetables(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
-
 func getVegetable(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	params := mux.Vars(r)
@@ -125,7 +114,6 @@ func getVegetable(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
-
 func createVegetable(w http.ResponseWriter, r *http.Request) {
 
 	DB, err := database.ConnectDB()
