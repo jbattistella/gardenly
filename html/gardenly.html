@@ -35,6 +35,11 @@
                 margin-top: 2cm;
                 padding: 5px;
             }
+            table {
+                margin: auto;
+                width: 30%;
+                border: 2px solid black;
+            }
           </style>
     </head>
 </html>
@@ -42,20 +47,28 @@
     <h1>Gardenly</h1>
     <h2 style="font-size:2em"><b>{{ .Messages }}</b></h2>
 <body>
+{{if .PlantingSeason }}
+    <h2>{{ .VegHeader }}</h2>
     <table>
         <tr>
-            <td><b>{{ .VegHeader }}</b></td>
+            <td><b>  Vegetable  </b></td>
+            <td><b>Days-to-Harvest</b></td>
         </tr>
-        {{ range $v := .Vegetables }}
+        {{ range .Vegetables }}
             <tr>
-                <td>{{ $v }}</td>
+                <td>{{ .CommonName }}</td>
+                <td>{{ .DTM }}</td>
             </tr>
-        {{ end}}
+        {{end}}
     </table>
+{{else}} 
+{{end}}
+</body>
     <form method="get" action="/">
         <button type="submit">Home</button>
     </form>
-</body>
+
+
 </html>
 
 
