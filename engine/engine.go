@@ -6,8 +6,8 @@ import (
 	"log"
 	"strconv"
 
-	"github.com/jbattistella/capstone-project/client"
-	"github.com/jbattistella/capstone-project/database"
+	"github.com/jbattistella/gardenly/client"
+	"github.com/jbattistella/gardenly/database"
 )
 
 type AppResponse struct {
