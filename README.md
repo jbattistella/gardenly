@@ -1,5 +1,7 @@
-# GardenAppProject
+# gardenly
 vegetable gardening app
+
+https://capstone-project-production-4648.up.railway.app/
 
 ## Summary
 The projected outlined here will be to create an api (gardenly) that, given user information (zipcode), returns information about what vegetables can be planted at the time of the request got their given growing zone. The project will involve creating a DB of vegetable types and their growing times in relation to the forst dates for zip codes in most of the United States, and an api that can take in user information and return a list of vegetables.
