@@ -1,4 +1,4 @@
-module github.com/jbattistella/capstone-project
+module github.com/jbattistella/gardenly
 
 go 1.19
 
