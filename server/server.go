@@ -10,7 +10,12 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/jbattistella/capstone-project/database"
 	"github.com/jbattistella/capstone-project/engine"
+	"gorm.io/gorm"
 )
+
+type DataStore struct {
+	db *gorm.DB
+}
 
 // gardenly ui request handlers
 func getGardenMsgHandler(w http.ResponseWriter, r *http.Request) {
@@ -76,52 +81,33 @@ func GardenlyHomeSubmission(w http.ResponseWriter, r *http.Request) {
 }
 
 // gardenly database handlers
-func getVegetables(w http.ResponseWriter, r *http.Request) {
+func (a *DataStore) getVegetables(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
-	DB, err := database.ConnectDB()
-	if err != nil {
-		log.Fatal("error connecting to DB")
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
 	var vegs []database.Vegetable
-	DB.Find(&vegs)
-	err = json.NewEncoder(w).Encode(&vegs)
+
+	a.db.Find(&vegs)
+	err := json.NewEncoder(w).Encode(&vegs)
 	if err != nil {
 		log.Println(err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 }
-func getVegetable(w http.ResponseWriter, r *http.Request) {
+func (a *DataStore) getVegetable(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	params := mux.Vars(r)
 
-	DB, err := database.ConnectDB()
-	if err != nil {
-		log.Fatal("error connecting to DB")
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-
 	var veg database.Vegetable
-	DB.First(&veg, "common_name = ?", params["name"])
-	err = json.NewEncoder(w).Encode(&veg)
+	a.db.First(&veg, "common_name = ?", params["name"])
+	err := json.NewEncoder(w).Encode(&veg)
 	if err != nil {
 		log.Println(err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 }
-func createVegetable(w http.ResponseWriter, r *http.Request) {
-
-	DB, err := database.ConnectDB()
-	if err != nil {
-		log.Fatal("error connecting to DB")
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
+func (a *DataStore) createVegetable(w http.ResponseWriter, r *http.Request) {
 
 	var veg database.Vegetable
 	if err := json.NewDecoder(r.Body).Decode(&veg); err != nil {
@@ -129,17 +115,11 @@ func createVegetable(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 	}
 
-	DB.Create(&veg)
+	a.db.Create(&veg)
 
 	w.WriteHeader(http.StatusCreated)
 }
-func updateVegetable(w http.ResponseWriter, r *http.Request) {
-	DB, err := database.ConnectDB()
-	if err != nil {
-		log.Fatal("error connecting to DB")
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
+func (a *DataStore) updateVegetable(w http.ResponseWriter, r *http.Request) {
 
 	var veg database.Vegetable
 	if err := json.NewDecoder(r.Body).Decode(&veg); err != nil {
@@ -148,18 +128,12 @@ func updateVegetable(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	DB.Model(&veg).Where("common_name = ?", veg.CommonName).Update("dtm", veg.DTM)
+	a.db.Model(&veg).Where("common_name = ?", veg.CommonName).Update("dtm", veg.DTM)
 
 	w.WriteHeader(http.StatusCreated)
 }
-func deleteVegetable(w http.ResponseWriter, r *http.Request) {
+func (a *DataStore) deleteVegetable(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
-	DB, err := database.ConnectDB()
-	if err != nil {
-		log.Fatal("error connecting to DB")
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
 
 	var veg database.Vegetable
 	if err := json.NewDecoder(r.Body).Decode(&veg); err != nil {
@@ -168,11 +142,18 @@ func deleteVegetable(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	DB.Where("common_name = ?", params["name"]).Delete(&veg)
+	a.db.Where("common_name = ?", params["name"]).Delete(&veg)
 
 	w.WriteHeader(http.StatusOK)
 }
 func GardenAPI() {
+
+	DB, err := database.ConnectDB()
+	if err != nil {
+		log.Fatal()
+	}
+
+	a := DataStore{db: DB}
 
 	r := mux.NewRouter()
 
@@ -181,11 +162,11 @@ func GardenAPI() {
 	r.HandleFunc("/", GardenlyHomeSubmission).Methods("POST")
 
 	//database
-	r.HandleFunc("/vegetables", getVegetables).Methods("GET")
-	r.HandleFunc("/vegetables/{name}", getVegetable).Methods("GET")
-	r.HandleFunc("/vegetables", createVegetable).Methods("POST")
-	r.HandleFunc("/vegetables", updateVegetable).Methods("PUT")
-	r.HandleFunc("/vegetables/{name}", deleteVegetable).Methods("DELETE")
+	r.HandleFunc("/vegetables", a.getVegetables).Methods("GET")
+	r.HandleFunc("/vegetables/{name}", a.getVegetable).Methods("GET")
+	r.HandleFunc("/vegetables", a.createVegetable).Methods("POST")
+	r.HandleFunc("/vegetables", a.updateVegetable).Methods("PUT")
+	r.HandleFunc("/vegetables/{name}", a.deleteVegetable).Methods("DELETE")
 
 	log.Println("Listening on port 8080")
 	log.Fatal(http.ListenAndServe(":8080", r))
