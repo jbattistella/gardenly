@@ -12,6 +12,10 @@ import (
 	_ "github.com/lib/pq"
 )
 
+type DataStore struct {
+	db *gorm.DB
+}
+
 func ConnectDB() (*gorm.DB, error) {
 	if err := godotenv.Load(); err != nil {
 		log.Fatal(err)
