@@ -8,8 +8,8 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	"github.com/jbattistella/capstone-project/database"
-	"github.com/jbattistella/capstone-project/engine"
+	"github.com/jbattistella/gardenly/database"
+	"github.com/jbattistella/gardenly/engine"
 	"gorm.io/gorm"
 )
 
