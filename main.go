@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/jbattistella/capstone-project/server"
+	"github.com/jbattistella/gardenly/server"
 )
 
 //using flag to add cli functionality, how can CLI be used to add quality and value to program
