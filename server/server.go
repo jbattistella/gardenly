@@ -75,8 +75,9 @@ func GardenlyHomeSubmission(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 
 	zipcode := r.FormValue("zipcode")
+	//add default value or disable submit button if form is incomplete
 
-	http.Redirect(w, r, fmt.Sprintf("/gardenly/%s", zipcode), http.StatusFound)
+	http.Redirect(w, r, fmt.Sprintf("/%s", zipcode), http.StatusFound)
 
 }
 
@@ -157,7 +158,7 @@ func GardenAPI() {
 
 	r := mux.NewRouter()
 
-	r.HandleFunc("/gardenly/{zipcode}", getGardenMsgHandler).Methods("GET")
+	r.HandleFunc("/{zipcode}", getGardenMsgHandler).Methods("GET")
 	r.HandleFunc("/", GardenlyHome).Methods("GET")
 	r.HandleFunc("/", GardenlyHomeSubmission).Methods("POST")
 
