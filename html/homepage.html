@@ -3,41 +3,59 @@
     <head>
         <title>Gardenly Home</title>
         <style type="text/css">
-            body { font-family: Verdana, Geneva, Tahoma, sans-serif;
+            #page{
+                background-color: bisque;
+            }
+            body { font-family: monospace;
                 margin: 5%;
                 text-align: center;
                 color: #000000;
             }
-            h1 { font-family: Verdana, Geneva, Tahoma, sans-serif;
+            h1 { font-family: monospace;
                 font-style: italic;
-                font-size: 45pt;
+                font-size: 48pt;
                 font-weight: Bold;
+                letter-spacing: .17em;
                 color: green;
                 margin: 5%;
                 padding: 0;
             }
-            label { font-family: Verdana, Geneva, Tahoma, sans-serif;
+            label { font-family: monospace;
                 font-size: 22pt;
-                font-weight: bolder;
+                letter-spacing: .04em;
+                /* font-weight: ; */
                 margin-bottom: 1cm;
                 color: green;
             }
-            input { font-size: 12pt;
-                    margin-top: 1cm;
-                    padding: 5px;
+            #form { 
+                font-family: monospace;
+                color: green;
+                background-color: bisque;
+                border-style: dashed;
+                font-size: 12pt;
+                margin-top: 1cm;
+                padding: 5px;
+            }
+            #button { 
+                font-family: monospace;
+                color: green;
+                background-color: bisque;
+                font-size: 12pt;
+                margin-top: 1cm;
+                padding: 5px;
             }
           </style>
     </head>
 </html>
 <html lang="en">
-    <body>
-        <h1>Welcome to Gardenly</h1>
+    <body id="page">
+        <h1>Gardenly</h1>
         <form method="post" action="/">
             <label>Enter Your ZipCode:</label>
             <br>
-            <input type="text" name="zipcode">
+            <input id="form" type="text" name="zipcode">
             <br>
-            <input type="submit">
+            <input id="button" type="submit">
         </form>
     </body>
 </html>
