@@ -57,7 +57,7 @@ func TestDaysFrom(t *testing.T) {
 		dateTime, _ := time.Parse("20060102", dateString)
 		daysFrom := math.RoundToEven(time.Until(dateTime).Hours() / 24)
 
-		res := DaysFrom(testDate, 0)
+		res, _ := DaysFrom(testDate, 0)
 
 		if res != daysFrom {
 			t.Errorf("calculating days from (2022-10-27) FAILED. Wanted %v got %v", daysFrom, res)

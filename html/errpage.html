@@ -3,14 +3,15 @@
     <head>
         <title>gardenly</title>
         <style type="text/css">
-            h1 { 
-                font-family: Verdana, Geneva, Tahoma, sans-serif;
+           h1 { 
+                font-family: monospace;
                 text-align: center;
                 font-style: italic;
                 font-size: 45pt;
                 font-weight: Bold;
+                letter-spacing: .17em;
                 color: green;
-                margin: 0;
+                margin: 5%;
                 padding: 0;
             }
             body { 
@@ -19,10 +20,24 @@
                 margin: 5%;
                 color: #8f0303;
             }
+            h2{
+                font-family: monospace;
+                font-size: 22pt;
+                letter-spacing: .04em;
+                /* font-weight: ; */
+                margin-bottom: 1cm;
+                color: green;
+            }
+            #page{
+                background-color: bisque;
+            }
             button { 
-
+                font-family: monospace;
+                color: green;
+                background-color: bisque;
                 font-size: 12pt;
-                margin-top: 2cm;
+                letter-spacing: .02em;
+                margin-top: 1cm;
                 padding: 5px;
             }
           </style>
@@ -30,9 +45,9 @@
 </html>
 <html lang="en">
     <h1>Gardenly</h1>
-<body>
-    <h2 style="font-size:2em"><b>{{ .Message }}</b></h2>
-    <p>Currently zip codes below the 31st parallel are not supported by Gardenly</p>
+<body id="page">
+    <h2><b>{{ .Message }}</b></h2>
+    <!-- <p>Some zipcodes in areas that do not experience temperatures below 40 are not currently supported by Gardenly</p> -->
     <form method="get" action="/">
         <button type="submit">Home</button>
     </form>

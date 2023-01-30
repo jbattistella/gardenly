@@ -163,7 +163,7 @@ func GardenAPI() {
 	r.HandleFunc("/", GardenlyHomeSubmission).Methods("POST")
 
 	//database
-	r.HandleFunc("/vegetables", a.getVegetables).Methods("GET")
+	r.HandleFunc("/vegetables/all", a.getVegetables).Methods("GET")
 	r.HandleFunc("/vegetables/{name}", a.getVegetable).Methods("GET")
 	r.HandleFunc("/vegetables", a.createVegetable).Methods("POST")
 	r.HandleFunc("/vegetables", a.updateVegetable).Methods("PUT")

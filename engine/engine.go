@@ -26,6 +26,8 @@ func Engine(zip string) (AppResponse, error) {
 
 	//non test code
 	if zip[0] != 't' {
+		client.GetZoneByZipcode(zip)
+
 		zipCode, err := strconv.Atoi(zip)
 		if err != nil {
 			err = errors.New("re-enter zip code as a five digit integer")
@@ -42,6 +44,9 @@ func Engine(zip string) (AppResponse, error) {
 			return AppResponse{}, err
 		}
 		dTFrost, err = client.GetDatesByTemperature(station, 0)
+		if err != nil {
+			return AppResponse{}, err
+		}
 	}
 	//test cases and vars
 	var LastFrostPlus float64
@@ -117,8 +122,7 @@ func Engine(zip string) (AppResponse, error) {
 		case dTFrost.FirstFrost > -30:
 			if zip[0] == 't' {
 				a = AppResponse{
-					Msg1: "Winter is coming!\n",
-					Msg2: "Garlic and Onions can be planted in the fall and winter for spring harvest \n\n",
+					Msg2: "Winter is coming!\nGarlic and Onions can be planted in the fall and late winter for spring and summer harvest \n\n",
 					Msg3: fmt.Sprintf("There are %0.0f days until the last frost. Check back in at %0.0f days", LastFrostPlus, (LastFrostPlus - 45)),
 				}
 				return a, nil
@@ -131,15 +135,13 @@ func Engine(zip string) (AppResponse, error) {
 			lastFrost := dTFrost.LastFrost
 
 			a = AppResponse{
-				Msg1: "Winter is coming!\n",
-				Msg2: "Garlic and Onions can be planted in the fall and winter for spring harvest \n\n",
+				Msg2: "Winter is coming!\nGarlic and Onions can be planted in the fall and late winter for spring and summer harvest \n\n",
 				Msg3: fmt.Sprintf("There are %0.0f days until the last frost. Check back in at %0.0f days", lastFrost, (lastFrost - 45)),
 			}
 		case dTFrost.FirstFrost < -30:
 			if zip[0] == 't' {
 				a = AppResponse{
-					Msg1: "Winter is coming!\n",
-					Msg2: "Garlic and Onions can be planted in the fall and winter for spring harvest \n\n",
+					Msg2: "We are in the cold season!\n",
 					Msg3: fmt.Sprintf("There are %0.0f days until the last frost. Check back in at %0.0f days", LastFrostPlus, (LastFrostPlus - 45)),
 				}
 				return a, nil
@@ -152,30 +154,7 @@ func Engine(zip string) (AppResponse, error) {
 			lastFrost := dTFrost.LastFrost
 
 			a = AppResponse{
-				Msg1: "Winter is coming!\n",
-				Msg2: "Garlic and Onions can be planted in the fall and winter for spring harvest \n\n",
-				Msg3: fmt.Sprintf("There are %0.0f days until the last frost. Check back in at %0.0f days", lastFrost, (lastFrost - 45)),
-			}
-
-		case dTFrost.FirstFrost < -60:
-			if zip[0] == 't' {
-				a = AppResponse{
-					Msg1: "Winter is coming!\n",
-					Msg2: "Garlic and Onions can be planted in the fall and winter for spring harvest \n\n",
-					Msg3: fmt.Sprintf("There are %0.0f days until the last frost. Check back in at %0.0f days", LastFrostPlus, (LastFrostPlus - 45)),
-				}
-				return a, nil
-			}
-
-			dTFrost, err := client.GetDatesByTemperature(station, 1)
-			if err != nil {
-				return AppResponse{}, err
-			}
-			lastFrost := dTFrost.LastFrost
-
-			a = AppResponse{
-				Msg1: "Winter is coming!\n",
-				Msg2: "Garlic and Onions can be planted in the fall and winter for spring harvest \n\n",
+				Msg2: "We are in the cold season!\n",
 				Msg3: fmt.Sprintf("There are %0.0f days until the last frost. Check back in at %0.0f days", lastFrost, (lastFrost - 45)),
 			}
 		}
