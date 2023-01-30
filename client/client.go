@@ -7,9 +7,42 @@ import (
 	"log"
 	"math"
 	"net/http"
+	"os"
 	"strconv"
 	"time"
+
+	"github.com/joho/godotenv"
 )
+
+// get hardiness zone
+func GetZoneByZipcode(zipcode string) {
+
+	if err := godotenv.Load(); err != nil {
+		log.Fatal(err)
+	}
+
+	url := fmt.Sprintf("https://plant-hardiness-zone.p.rapidapi.com/zipcodes/%s", zipcode)
+
+	req, _ := http.NewRequest("GET", url, nil)
+
+	req.Header.Add("X-RapidAPI-Key", os.Getenv("RAPIDAPI_KEY"))
+	req.Header.Add("X-RapidAPI-Host", "plant-hardiness-zone.p.rapidapi.com")
+
+	res, _ := http.DefaultClient.Do(req)
+
+	defer res.Body.Close()
+
+	type HardnessRes struct {
+		Hardiness string `json:"hardiness_zone"`
+		Zipcode   string `json:"zipcode"`
+	}
+
+	var hr HardnessRes
+
+	json.NewDecoder(res.Body).Decode(&hr)
+
+	log.Printf("zipcode:%s hardiness zone:%s", zipcode, hr.Hardiness)
+}
 
 func GetPostalInfo(zip int) (PostalCodeInfo, error) {
 
@@ -102,23 +135,39 @@ func GetDatesByTemperature(id string, y int) (DaysFromFrost, error) {
 		log.Fatal(err)
 	}
 
-	daysFromLastFrost := DaysFrom(springDates[0].Prob90, y)
-	daysFromFirstFrost := DaysFrom(fallDates[0].Prob90, y)
+	if springDates[0].Prob90 == "0000" || fallDates[0].Prob90 == "0000" {
+		return DaysFromFrost{}, errors.New("this zipcode is not supported by gardenly")
+	}
 
-	dff := DaysFromFrost{
-		FirstFrost: daysFromFirstFrost,
-		LastFrost:  daysFromLastFrost,
+	daysFromLastFrost, _ := DaysFrom(springDates[0].Prob90, y)
+	daysFromFirstFrost, fallDate := DaysFrom(fallDates[0].Prob90, y)
+	_, equinox := DaysFrom("0621", y)
+
+	var dff DaysFromFrost
+
+	if fallDate.Before(equinox) {
+		daysFromFirstFrost, _ := DaysFrom(springDates[0].Prob90, 1)
+		dff = DaysFromFrost{
+			FirstFrost: daysFromLastFrost,
+			LastFrost:  daysFromFirstFrost,
+		}
+	} else {
+		dff = DaysFromFrost{
+			FirstFrost: daysFromFirstFrost,
+			LastFrost:  daysFromLastFrost,
+		}
+
 	}
 
 	return dff, nil
 }
 
-func DaysFrom(t string, y int) float64 {
+func DaysFrom(t string, y int) (float64, time.Time) {
 	year := (time.Now().Year()) + y
 	dateString := fmt.Sprintf("%d%s", year, t)
 
 	date, _ := time.Parse("20060102", dateString)
 	daysFrom := math.RoundToEven(time.Until(date).Hours() / 24)
 
-	return daysFrom
+	return daysFrom, date
 }
