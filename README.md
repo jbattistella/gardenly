@@ -4,7 +4,7 @@ vegetable gardening app
 https://capstone-project-production-4648.up.railway.app/
 
 ## Summary
-The projected outlined here will be to create an web application that, given user information (zipcode), returns information about what vegetables can be planted at the time of the request depending on their location. The project will involve creating a DB of vegetable types and their days to maturity, and creating logic to determine the vegetable types that will be returned to the user. The application is exposed to the internet through an API that allows interaction with application functions and a postgres database.
+Gardenly is a web application that, provides a user with a list of vegetables types that can be planted given the users location information(zip code).  This full stack application is written in golang and utilizes Gorilla Mux, Gorm, and html/template library. Gardenly uses a postgres database to store resouces, vegetable types and days to maturity; the logic processes location information to return a list of vegetables or days until first or last frost. The application is exposed to the internet through an API that allows interaction with application functions and a postgres database.
 
 I will demonstrate the following:
 
