@@ -22,7 +22,10 @@ I will demonstrate the following:
 
 Example:
 
-    curl http://localhost:8080/gardenly/35205
+    curl https://capstone-project-production-4648.up.railway.app/
+    
+    <img width="650" alt="image" src="https://user-images.githubusercontent.com/105764001/215872982-88af2239-a09a-4e81-a0e8-415ac210f545.png">
+
     
     There are 30 days until the last frost. 
 
