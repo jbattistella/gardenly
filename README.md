@@ -8,12 +8,18 @@ The projected outlined here will be to create an api (gardenly) that, given user
 
 I will demonstrate the following:
 
-1.Building a REST API in Go.\n
+1.Building a REST API in Go.
+
 2.Creating and interacting with a postgres DataBase.
+
 3.Ability to perform CRUD actions on resources through an API.
+
 4.Acting as a client to api's in order to gather location and weather data by zipcode.
+
 5.Testing of HTTP handlers.
+
 6.Testing of HTTP Client.
+
 7.Use html templates to display response results in browser.
 
 ## User Stories
