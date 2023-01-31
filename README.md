@@ -20,6 +20,8 @@ I will demonstrate the following:
 
 ### As a user I would like to fetch information about what vegetables I am able to plant at this time.
 
+<img width="650" alt="Screen Shot 2023-01-31 at 2 17 18 PM" src="https://user-images.githubusercontent.com/105764001/215873646-6a88c237-28ca-4ec7-a893-3678a0d9627d.png">
+
 Example:
 
     curl https://capstone-project-production-4648.up.railway.app/
