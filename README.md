@@ -1,4 +1,4 @@
-# gardenly
+# Gardenly
 vegetable gardening app
 
 https://capstone-project-production-4648.up.railway.app/
