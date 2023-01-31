@@ -8,19 +8,13 @@ The projected outlined here will be to create an web application that, given use
 
 I will demonstrate the following:
 
-1.Building a REST API in Go.
-
-2.Creating and interacting with a postgres DataBase.
-
-3.Ability to perform CRUD actions on resources through an API.
-
-4.Acting as a client to APIs in order to gather location and weather data by zipcode.
-
-5.Testing of HTTP Clients.
-
-6.Use html templates to display response results in browser.
-
-7.Utilizing railway cloud to host Gardenly.
+1. Building a REST API in Go.
+2. Creating and interacting with a postgres DataBase.
+3. Ability to perform CRUD actions on resources through an API.
+4. Acting as a client to APIs in order to gather location and weather data by zipcode.
+5. Testing of HTTP Clients.
+6. Use html templates to display response results in browser.
+7. Utilizing railway cloud to host Gardenly.
 
 ## User Stories
 
