@@ -18,32 +18,22 @@ I will demonstrate the following:
 
 ## User Stories
 
-### As a user I would like to fetch information about what vegetables I am able to plant at this time.
+## As a user I would like to fetch the types of vegetables I am able to plant at this time.
+
+https://capstone-project-production-4648.up.railway.app/
 
 <img width="650" alt="Screen Shot 2023-01-31 at 2 17 18 PM" src="https://user-images.githubusercontent.com/105764001/215873646-6a88c237-28ca-4ec7-a893-3678a0d9627d.png">
 
-Example:
+##By submitting my zip code I am redirected to this page:
 
-    curl https://capstone-project-production-4648.up.railway.app/
-    
-    <img width="650" alt="image" src="https://user-images.githubusercontent.com/105764001/215872982-88af2239-a09a-4e81-a0e8-415ac210f545.png">
+https://capstone-project-production-4648.up.railway.app/93301
 
-    
-    There are 30 days until the last frost. 
+<img width="782" alt="Screen Shot 2023-01-31 at 2 23 56 PM" src="https://user-images.githubusercontent.com/105764001/215874341-07e01fef-8a3c-4ee4-9b06-87bfa212e447.png">
 
-    You can plant:
-    carrot
-    beats
-    turnips
-    lettuce
-    ...
-    
-If the postal code is not found then the user will revieve an error message.
+##It is possible that my zip code is not supported by gardenly. 
 
-    curl http://localhost:8080/gardenly/34647589
-    
-    Error: "xyzip" is not found, please provide a valid zipcode.
-    
+<img width="645" alt="Screen Shot 2023-01-31 at 2 27 27 PM" src="https://user-images.githubusercontent.com/105764001/215875192-855acdcc-b00e-423a-8a2b-88d72cabd585.png">
+
     
 
 
