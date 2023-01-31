@@ -16,11 +16,9 @@ I will demonstrate the following:
 
 4.Acting as a client to api's in order to gather location and weather data by zipcode.
 
-5.Testing of HTTP handlers.
+5.Testing of HTTP Clients.
 
-6.Testing of HTTP Client.
-
-7.Use html templates to display response results in browser.
+6.Use html templates to display response results in browser.
 
 ## User Stories
 
