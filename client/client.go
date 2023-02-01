@@ -44,9 +44,14 @@ func GetZoneByZipcode(zipcode string) {
 	log.Printf("zipcode:%s hardiness zone:%s", zipcode, hr.Hardiness)
 }
 
-func GetPostalInfo(zip int) (PostalCodeInfo, error) {
-
-	url := fmt.Sprintf("http://api.zippopotam.us/us/%d", zip)
+func GetPostalInfo(zip int, z bool) (PostalCodeInfo, error) {
+	var url string
+	//handles postal codes that begin with 0
+	if z == true {
+		url = fmt.Sprintf("http://api.zippopotam.us/us/0%d", zip)
+	} else {
+		url = fmt.Sprintf("http://api.zippopotam.us/us/%d", zip)
+	}
 
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
