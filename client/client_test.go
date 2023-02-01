@@ -11,7 +11,7 @@ import (
 
 func TestGetPostalInfo(t *testing.T) {
 	t.Run("OK", func(t *testing.T) {
-		res, err := GetPostalInfo(35205)
+		res, err := GetPostalInfo(35205, false)
 		assert.NoError(t, err)
 		assert.Equal(t, PostalCodeInfo{
 			PostCode:            "35205",

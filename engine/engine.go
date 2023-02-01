@@ -28,13 +28,18 @@ func Engine(zip string) (AppResponse, error) {
 	if zip[0] != 't' {
 		client.GetZoneByZipcode(zip)
 
+		var zero bool
+		if zip[0] == '0' {
+			zero = true
+		}
+
 		zipCode, err := strconv.Atoi(zip)
 		if err != nil {
 			err = errors.New("re-enter zip code as a five digit integer")
 			return AppResponse{}, err
 		}
 
-		postalInfo, err := client.GetPostalInfo(zipCode)
+		postalInfo, err := client.GetPostalInfo(zipCode, zero)
 		if err != nil {
 			return AppResponse{}, err
 		}
