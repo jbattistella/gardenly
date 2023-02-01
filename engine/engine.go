@@ -1,10 +1,8 @@
 package engine
 
 import (
-	"errors"
 	"fmt"
 	"log"
-	"strconv"
 
 	"github.com/jbattistella/gardenly/client"
 	"github.com/jbattistella/gardenly/database"
@@ -28,18 +26,7 @@ func Engine(zip string) (AppResponse, error) {
 	if zip[0] != 't' {
 		client.GetZoneByZipcode(zip)
 
-		var zero bool
-		if zip[0] == '0' {
-			zero = true
-		}
-
-		zipCode, err := strconv.Atoi(zip)
-		if err != nil {
-			err = errors.New("re-enter zip code as a five digit integer")
-			return AppResponse{}, err
-		}
-
-		postalInfo, err := client.GetPostalInfo(zipCode, zero)
+		postalInfo, err := client.GetPostalInfo(zip)
 		if err != nil {
 			return AppResponse{}, err
 		}
