@@ -98,7 +98,7 @@ func Engine(zip string) (AppResponse, error) {
 	if dTFrost.FirstFrost > 45 && dTFrost.FirstFrost < 95 {
 		a = AppResponse{
 			Msg1:       fmt.Sprintf("%d days until the first frost.", int(dTFrost.FirstFrost)),
-			Vegetables: getCropsToPlant(dTFrost.FirstFrost - 15),
+			Vegetables: getCropsToPlant(dTFrost.FirstFrost - 10),
 		}
 	}
 
