@@ -45,8 +45,9 @@ func GetZoneByZipcode(zipcode string) {
 }
 
 func GetPostalInfo(zip string) (PostalCodeInfo, error) {
-	var url string
+	
 	//handles postal codes that begin with 0
+	url = fmt.Sprintf("http://api.zippopotam.us/us/%s", zip)
 	
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
