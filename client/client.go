@@ -44,7 +44,7 @@ func GetZoneByZipcode(zipcode string) {
 	log.Printf("zipcode:%s hardiness zone:%s", zipcode, hr.Hardiness)
 }
 
-func GetPostalInfo(zip int) (PostalCodeInfo, error) {
+func GetPostalInfo(zip string) (PostalCodeInfo, error) {
 	var url string
 	//handles postal codes that begin with 0
 	
